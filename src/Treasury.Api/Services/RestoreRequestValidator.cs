@@ -39,7 +39,7 @@ public static class RestoreRequestValidator
             if (duplicate) referenceErrors.Add("reference не должен содержать повторяющихся символов.");
         }
 
-        if (request.Damaged is null)
+        if (string.IsNullOrEmpty(request.Damaged))
         {
             damagedErrors.Add("Поле damaged обязательно.");
         }
