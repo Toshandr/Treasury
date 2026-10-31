@@ -1,16 +1,6 @@
 # Treasury API
 
-ASP.NET Core Web API (.NET 10) для определения отсутствующих символов в повреждённом коде созвездия.
-
-## Структура
-
-```
-Treasury/
-  src/Treasury.Api/      API (Minimal API, DTO, сервис, валидатор)
-  tests/Treasury.Tests/  unit- и интеграционные тесты
-  k8s/                   манифесты Kubernetes
-  Dockerfile
-```
+ASP.NET Core Web API (.NET 10) для определения отсутствующих символов.
 
 ## Запуск
 
@@ -47,30 +37,6 @@ kubectl port-forward svc/treasury-api 8080:80
 ```
 
 Swagger: http://localhost:8080/swagger
-
-## Эндпоинт
-
-`POST /api/constellations/restore`
-
-Запрос:
-
-```json
-{ "reference": "DRAGON", "damaged": "GOD" }
-```
-
-Ответ 200:
-
-```json
-{ "missingSymbols": "ANR", "isComplete": false }
-```
-
-Если символы не потеряны:
-
-```json
-{ "missingSymbols": "", "isComplete": true }
-```
-
-Некорректные данные: 400 Bad Request.
 
 ## Валидация
 

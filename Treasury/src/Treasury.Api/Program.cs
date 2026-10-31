@@ -14,10 +14,10 @@ app.UseSwaggerUI();
 
 app.MapPost("/api/constellations/restore", (RestoreRequest request, IRestoreService service) =>
 {
-    var error = RestoreRequestValidator.Validate(request);
-    return error is null
+    var errors = RestoreRequestValidator.Validate(request);
+    return errors.Count == 0
         ? Results.Ok(service.Restore(request.Reference!, request.Damaged!))
-        : Results.BadRequest(new { error });
+        : Results.BadRequest(new { status = StatusCodes.Status400BadRequest, errors });
 })
 .Produces<RestoreResponse>(StatusCodes.Status200OK)
 .Produces(StatusCodes.Status400BadRequest);

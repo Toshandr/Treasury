@@ -2,6 +2,8 @@ using System.Net;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Treasury.Api.Dtos;
+using System.Text.Json;
+using Xunit;
 
 namespace Treasury.Tests;
 
@@ -55,5 +57,27 @@ public class RestoreApiTests : IClassFixture<WebApplicationFactory<Program>>
         var response = await _client.PostAsync(Url, content);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Restore_WithErrorsInBothFields_ReturnsAllErrors()
+    {
+        var response = await _client.PostAsJsonAsync(Url, new { reference = "DRAG1N", damaged = "GG" });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        using var doc = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync());
+        var errors = doc.RootElement.GetProperty("errors");
+        Assert.True(errors.TryGetProperty("reference", out _));
+        Assert.True(errors.TryGetProperty("damaged", out _));
+    }
+
+    [Fact]
+    public async Task Restore_WithSeveralErrorsInOneField_ReturnsAllOfThem()
+    {
+        var response = await _client.PostAsJsonAsync(Url, new { reference = "DDRAG1N", damaged = "G" });
+
+        using var doc = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync());
+        var errors = doc.RootElement.GetProperty("errors");
+        Assert.Equal(2, errors.GetProperty("reference").GetArrayLength());
     }
 }
