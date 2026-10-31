@@ -38,6 +38,7 @@ kubectl port-forward svc/treasury-api 8080:80
 
 Swagger: http://localhost:8080/swagger
 
+
 ## Валидация
 
 - `reference` обязателен, не пустой, только A-Z, без повторов.
