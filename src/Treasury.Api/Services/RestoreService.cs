@@ -7,8 +7,8 @@ public class RestoreService : IRestoreService
 {
     private const int AlphabetSize = 26;
 
-    // O(n + m): один проход по каждой строке, затем фиксированный проход по 26 буквам.
-    // Обход алфавита по порядку сразу даёт отсортированный результат, сортировка не нужна.
+    // O(n + m): один проход по каждой строке, затем фиксированный проход по 26 буквам
+    // Обход алфавита по порядку сразу даёт отсортированный результат, сортировка не нужна
     public RestoreResponse Restore(string reference, string damaged)
     {
         var inReference = new bool[AlphabetSize];
